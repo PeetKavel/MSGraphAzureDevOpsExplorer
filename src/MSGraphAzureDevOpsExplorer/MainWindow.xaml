@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="MSGraphAzureDevOpsExplorer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:MSGraphAzureDevOpsExplorer"
+    xmlns:securityGroups="using:MSGraphAzureDevOpsExplorer.Features.SecurityGroups"
+    xmlns:settings="using:MSGraphAzureDevOpsExplorer.Features.Settings"
+    mc:Ignorable="d"
+    Title="MS Graph Azure DevOps Explorer">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header with user info and sign-in controls -->
+        <Border Grid.Row="0" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" Padding="16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
+                    <FontIcon Glyph="&#xE77B;" FontSize="20" />
+                    <TextBlock Text="MS Graph Azure DevOps Explorer"
+                               Style="{ThemeResource SubtitleTextBlockStyle}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="8">
+                    <TextBlock x:Name="UserDisplayName"
+                               Text="Not signed in"
+                               VerticalAlignment="Center"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <Button x:Name="SignInButton"
+                            Content="Sign In"
+                            Click="SignInButton_Click"
+                            Style="{ThemeResource AccentButtonStyle}" />
+                    <Button x:Name="SwitchUserButton"
+                            Content="Switch User"
+                            Click="SwitchUserButton_Click"
+                            Visibility="Collapsed" />
+                    <Button x:Name="SignOutButton"
+                            Content="Sign Out"
+                            Click="SignOutButton_Click"
+                            Visibility="Collapsed" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Tab view with features -->
+        <TabView Grid.Row="1"
+                 x:Name="MainTabView"
+                 IsAddTabButtonVisible="False"
+                 TabWidthMode="Equal">
+
+            <TabViewItem Header="Security Groups" IsClosable="False">
+                <TabViewItem.IconSource>
+                    <SymbolIconSource Symbol="People" />
+                </TabViewItem.IconSource>
+                <securityGroups:SecurityGroupsPage x:Name="SecurityGroupsPageControl" />
+            </TabViewItem>
+
+            <TabViewItem Header="Settings" IsClosable="False">
+                <TabViewItem.IconSource>
+                    <SymbolIconSource Symbol="Setting" />
+                </TabViewItem.IconSource>
+                <settings:SettingsPage x:Name="SettingsPageControl" />
+            </TabViewItem>
+
+        </TabView>
+    </Grid>
+</Window>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="MSGraphAzureDevOpsExplorer.Features.Settings.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer Padding="16">
+        <StackPanel MaxWidth="600" Spacing="16">
+
+            <!-- Title -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Settings"
+                           Style="{ThemeResource TitleTextBlockStyle}" />
+                <TextBlock Text="Configure the application settings for connecting to Entra ID."
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+            <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+            <!-- Tenant configuration -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Azure / Entra ID Configuration"
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Tenant ID" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                    <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                        Enter your Entra ID tenant ID or domain name (e.g. contoso.onmicrosoft.com).
+                        Use "common" to allow any tenant.
+                    </TextBlock>
+                    <TextBox PlaceholderText="e.g. contoso.onmicrosoft.com or common"
+                             Text="{x:Bind ViewModel.TenantId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Client (Application) ID" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                    <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                        The Application (client) ID from your Azure App Registration.
+                        The app requires the GroupMember.Read.All and User.Read delegated permissions.
+                    </TextBlock>
+                    <TextBox PlaceholderText="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                             Text="{x:Bind ViewModel.ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </StackPanel>
+
+            <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+            <!-- Save / Reset buttons -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Save Settings"
+                        Command="{x:Bind ViewModel.SaveSettingsCommand}"
+                        Style="{ThemeResource AccentButtonStyle}" />
+                <Button Content="Reset to Defaults"
+                        Command="{x:Bind ViewModel.ResetToDefaultsCommand}" />
+            </StackPanel>
+
+            <!-- Save feedback -->
+            <InfoBar IsOpen="{x:Bind ViewModel.IsSaved, Mode=OneWay}"
+                     Severity="Success"
+                     Title="Saved"
+                     Message="{x:Bind ViewModel.SaveMessage, Mode=OneWay}" />
+
+            <InfoBar IsOpen="{x:Bind ViewModel.HasSaveError, Mode=OneWay}"
+                     Severity="Error"
+                     Title="Save Failed"
+                     Message="{x:Bind ViewModel.SaveMessage, Mode=OneWay}" />
+
+            <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+            <!-- App registration guidance -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Setup Guide"
+                           Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <TextBlock TextWrapping="Wrap"
+                           Style="{ThemeResource BodyTextBlockStyle}">
+                    To use this application, you need to register an application in the Azure portal:
+                </TextBlock>
+                <StackPanel Spacing="4">
+                    <TextBlock TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}">
+                        1. Go to Azure Portal → Azure Active Directory → App registrations → New registration
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}">
+                        2. Set the redirect URI to: ms-appx-web://microsoft.aad.brokerplugin/{ClientId}
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}">
+                        3. Under API permissions, add: Microsoft Graph → Delegated → User.Read and GroupMember.Read.All
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}">
+                        4. Copy the Application (client) ID and paste it above
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
