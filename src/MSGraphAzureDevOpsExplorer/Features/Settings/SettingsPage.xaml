@@ -66,6 +66,11 @@
                      Title="Saved"
                      Message="{x:Bind ViewModel.SaveMessage, Mode=OneWay}" />
 
+            <InfoBar IsOpen="{x:Bind ViewModel.HasSaveError, Mode=OneWay}"
+                     Severity="Error"
+                     Title="Save Failed"
+                     Message="{x:Bind ViewModel.SaveMessage, Mode=OneWay}" />
+
             <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
 
             <!-- App registration guidance -->

@@ -7,5 +7,4 @@ public class SecurityGroup
     public string? Description { get; set; }
     public string? Mail { get; set; }
     public bool? SecurityEnabled { get; set; }
-    public string? GroupType { get; set; }
 }

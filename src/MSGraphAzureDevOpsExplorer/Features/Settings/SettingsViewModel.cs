@@ -20,6 +20,9 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string? saveMessage;
 
+    [ObservableProperty]
+    private bool hasSaveError;
+
     public SettingsViewModel(ISettingsService settingsService)
     {
         _settingsService = settingsService;
@@ -32,9 +35,19 @@ public partial class SettingsViewModel : ObservableObject
     {
         _settingsService.TenantId = TenantId;
         _settingsService.ClientId = ClientId;
-        _settingsService.Save();
-        IsSaved = true;
-        SaveMessage = "Settings saved successfully.";
+        var error = _settingsService.Save();
+        if (error == null)
+        {
+            IsSaved = true;
+            HasSaveError = false;
+            SaveMessage = "Settings saved successfully.";
+        }
+        else
+        {
+            IsSaved = false;
+            HasSaveError = true;
+            SaveMessage = error;
+        }
     }
 
     [RelayCommand]
@@ -43,18 +56,21 @@ public partial class SettingsViewModel : ObservableObject
         TenantId = "common";
         ClientId = string.Empty;
         IsSaved = false;
+        HasSaveError = false;
         SaveMessage = null;
     }
 
     partial void OnTenantIdChanged(string value)
     {
         IsSaved = false;
+        HasSaveError = false;
         SaveMessage = null;
     }
 
     partial void OnClientIdChanged(string value)
     {
         IsSaved = false;
+        HasSaveError = false;
         SaveMessage = null;
     }
 }

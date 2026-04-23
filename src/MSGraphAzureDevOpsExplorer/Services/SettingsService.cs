@@ -5,7 +5,7 @@ namespace MSGraphAzureDevOpsExplorer.Services;
 public class SettingsService : ISettingsService
 {
     private const string DefaultTenantId = "common";
-    private const string DefaultClientId = "YOUR_CLIENT_ID_HERE";
+    private const string DefaultClientId = "";
 
     private static readonly string SettingsFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -41,7 +41,7 @@ public class SettingsService : ISettingsService
         Load();
     }
 
-    public void Save()
+    public string? Save()
     {
         try
         {
@@ -49,14 +49,15 @@ public class SettingsService : ISettingsService
             var data = new SettingsData { TenantId = _tenantId, ClientId = _clientId };
             var json = JsonSerializer.Serialize(data, SettingsJsonContext.Default.SettingsData);
             File.WriteAllText(SettingsFilePath, json);
+            return null;
         }
-        catch
+        catch (Exception ex)
         {
-            // Silently ignore save failures
+            return $"Could not save settings: {ex.Message}";
         }
     }
 
-    public void Load()
+    public string? Load()
     {
         try
         {
@@ -67,14 +68,16 @@ public class SettingsService : ISettingsService
                 if (data != null)
                 {
                     _tenantId = string.IsNullOrWhiteSpace(data.TenantId) ? DefaultTenantId : data.TenantId;
-                    _clientId = string.IsNullOrWhiteSpace(data.ClientId) ? DefaultClientId : data.ClientId;
+                    _clientId = data.ClientId ?? DefaultClientId;
                 }
             }
+            return null;
         }
-        catch
+        catch (Exception ex)
         {
             _tenantId = DefaultTenantId;
             _clientId = DefaultClientId;
+            return $"Could not load settings: {ex.Message}";
         }
     }
 
